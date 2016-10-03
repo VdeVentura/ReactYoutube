@@ -4,6 +4,7 @@ import YTSearch from 'youtube-api-search';
 
 import SearchBar from './components/search_bar';
 import VideoList from './components/video_list';
+import VideoDetail from './components/video_detail'
 
 const API_KEY = 'AIzaSyCrqhSOJNI-36Wot2CT6jBRXtp72rcJtIk';
 
@@ -14,7 +15,8 @@ class App extends Component {
 		super();
 
 		this.state = {
-			videos: []
+			videos: [],
+			selectedVideo: null
 		};
 
 		YTSearch({ key: API_KEY, term: 'dota' }, (videos) => {
@@ -22,7 +24,10 @@ class App extends Component {
 			// this really means "this.setState({videos : videos});"
 			// when the property and the parameter has the same name this can be
 			// wrote as bellow
-			this.setState({videos});
+			this.setState({
+				videos : videos,
+				selectedVideo : videos[0]
+			});
 
 		});
 	}
@@ -30,7 +35,10 @@ class App extends Component {
 		return (
 			<div>
 				<SearchBar />
-				<VideoList videos={this.state.videos}/>
+				<VideoDetail video={this.state.selectedVideo}/>
+				<VideoList
+					onVideoSelect={(selectedVideo) => this.setState({selectedVideo})}
+					videos={this.state.videos}/>
 			</div>
 		);
 	}
